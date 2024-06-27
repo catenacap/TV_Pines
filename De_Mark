@@ -1,0 +1,26 @@
+//@version=4
+study("DeMarker", shorttitle="DeM", overlay=false)
+
+// User-defined input for the period length
+per = input(title="Period", type=input.integer, defval=13)
+
+// Calculate demax and demin values
+demax = high > high[1] ? high - high[1] : 0
+demin = low < low[1] ? low[1] - low : 0
+
+// Calculate the moving averages of demax and demin
+demax_av = sma(demax, per)
+demin_av = sma(demin, per)
+
+// Calculate the DeMarker value
+dmark = demax_av / (demax_av + demin_av)
+
+// Plot horizontal lines at 0.3 and 0.7
+h1 = hline(0.3, "Lower Bound", color=color.blue)
+h2 = hline(0.7, "Upper Bound", color=color.blue)
+
+// Fill the area between the horizontal lines with blue color
+fill(h1, h2, color=color.blue)
+
+// Plot the DeMarker indicator
+plot(dmark, color=color.orange, title="DeMarker")
